@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package cadastroclientv2;
 
 import java.io.*;
@@ -11,10 +8,7 @@ import javax.swing.*;
 import model.Produtos;
 
 
-/**
- *
- * @author leosc
- */
+
 public class CadastroClientV2 {
 
     /**

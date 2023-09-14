@@ -1,17 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cadastroclientv2;
 
 import java.io.ObjectInputStream;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author leosc
- */
+
 public class ThreadClient extends Thread {
     private  ObjectInputStream in;
     private final JTextArea textArea;

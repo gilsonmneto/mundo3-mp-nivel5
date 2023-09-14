@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package cadastroclient;
 
 import java.io.IOException;
@@ -11,10 +8,7 @@ import java.net.Socket;
 import java.util.List;
 import model.Produtos;
 
-/**
- *
- * @author leosc
- */
+
 public class CadastroClient {
 
     /**
@@ -30,8 +24,8 @@ public class CadastroClient {
             out.writeObject("op1"); 
             out.writeObject("op1"); 
             out.writeObject("L"); 
-            System.out.println("Usuario conectado com sucesso");
-            
+
+
             List<Produtos> produtos = (List<Produtos>) in.readObject();
             for (Produtos produto : produtos) {
                 System.out.println(produto.getNome());

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
 import java.io.Serializable;
@@ -16,10 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author leosc
- */
+
 @Entity
 @Table(name = "Produtos")
 @NamedQueries({
@@ -39,7 +33,7 @@ public class Produtos implements Serializable {
     private String nome;
     @Column(name = "quantidade")
     private Integer quantidade;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Column(name = "precoVenda")
     private BigDecimal precoVenda;
     @OneToMany(mappedBy = "idProduto")

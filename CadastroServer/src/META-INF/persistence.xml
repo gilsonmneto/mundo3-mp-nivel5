@@ -9,8 +9,8 @@
     <class>model.PessoasJuridicas</class>
     <class>model.Produtos</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=loja;encrypt=true;trustServerCertificate=true;"/>
-      <property name="javax.persistence.jdbc.user" value="Loja"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=jdbc:sqlserver:// localhost:1433;databaseName=loja;encrypt=true;trustServerCertificate=true;"/>
+      <property name="javax.persistence.jdbc.user" value="loja"/>
       <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
       <property name="javax.persistence.jdbc.password" value="loja"/>
     </properties>

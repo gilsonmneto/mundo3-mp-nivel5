@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package cadastroserver;
 
 import controller.MovimentosJpaController;
@@ -22,10 +19,7 @@ import model.Produtos;
 import model.Pessoas;
 import model.Usuarios;
  
-/**
- *
- * @author leosc
- */
+
 public class CadastroThreadV2 extends Thread {
     private final UsuariosJpaController ctrlUsu;
     private final MovimentosJpaController ctrlMov;
