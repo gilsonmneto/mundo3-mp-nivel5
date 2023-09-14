@@ -1,25 +1,24 @@
 
 package cadastroserver;
 
-import controller.ProdutosJpaController;
-import controller.UsuariosJpaController;
+import controller.ProdutoJpaController;
+import controller.UsuarioJpaController;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Produtos;
-import model.Usuarios;
+import model.Usuario;
 
 
 public class CadastroThread extends Thread {
-    private final ProdutosJpaController ctrl;
-    private final UsuariosJpaController ctrlUsu;
-    private final Socket s1;
 
-    public CadastroThread(ProdutosJpaController ctrl, UsuariosJpaController ctrlUsu, Socket s1) {
+    public final ProdutoJpaController ctrl;
+    public final UsuarioJpaController ctrlUsu;
+    public final Socket s1;
+
+    public CadastroThread(ProdutoJpaController ctrl, UsuarioJpaController ctrlUsu, Socket s1) {
         this.ctrl = ctrl;
         this.ctrlUsu = ctrlUsu;
         this.s1 = s1;
@@ -27,57 +26,49 @@ public class CadastroThread extends Thread {
 
     @Override
     public void run() {
-        try (ObjectOutputStream out = new ObjectOutputStream(s1.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(s1.getInputStream())){
+        System.out.println("thread is running...");
+
+        ObjectInputStream in = null;
+        ObjectOutputStream out = null;
+
+        try {
+            in = new ObjectInputStream(s1.getInputStream());
+            out = new ObjectOutputStream(s1.getOutputStream());
 
             String login = (String) in.readObject();
             String senha = (String) in.readObject();
-            List<Usuarios> usuariosList = ctrlUsu.findUsuariosEntities();
-            Usuarios usuarioAutenticado = null;
 
-            for (Usuarios usuario : usuariosList) {
-                if (usuario.getLogin().equals(login) && usuario.getSenha().equals(senha)) {
-                    usuarioAutenticado = usuario;
-                    break; 
-                }
-            }
-
-            if (usuarioAutenticado == null) {
-                System.out.println("Credenciais inválidas. Desconectando cliente.");
+            Usuario user = ctrlUsu.findUsuario(login, senha);
+            if (user == null) {
+                out.writeObject("nok");
                 return;
             }
+            out.writeObject("ok");
 
-            System.out.println("Usuario autenticado: " + usuarioAutenticado.getLogin());
-
-            while (true) {
-                String comando =(String) in.readObject();
-
-                if (comando.equals("L")) {
-                    List<Produtos> produtos = ctrl.findProdutosEntities();
-                    out.writeObject(produtos);
-                    System.out.println("Enviando lista de produtos para o cliente.");
-                    break;
+            String input;
+            do {
+                input = (String) in.readObject();
+                if ("l".equalsIgnoreCase(input)) {
+                    out.writeObject(ctrl.findProdutoEntities());
+                } else if (!"x".equalsIgnoreCase(input)) {
+                    System.out.println("Comando inválido recebido:" + input);
                 }
+
+            } while (!input.equalsIgnoreCase("x"));
+
+        } catch (ClassNotFoundException | IOException ex) {
+            Logger.getLogger(CadastroThread.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (Exception e) {
             }
 
-        try {
-            if (out != null) {
+            try {
                 out.close();
+            } catch (Exception e) {
             }
-            if (in != null) {
-                in.close();
-            }
-            if (s1 != null && !s1.isClosed()) {
-                s1.close();
-            }
-        }catch (IOException ex) {
-            System.err.println("Erro ao fechar os fluxos e o socket: " + ex.getMessage());
+            System.out.println("thread finalizada...");
         }
-        }catch (IOException ex) {
-            System.err.println("Erro de comunicação: " + ex.getMessage());
-        }catch (ClassNotFoundException ex) { 
-            Logger.getLogger(CadastroThread.class.getName()).log(Level.SEVERE, null, ex);
-        } 
     }
 }
-

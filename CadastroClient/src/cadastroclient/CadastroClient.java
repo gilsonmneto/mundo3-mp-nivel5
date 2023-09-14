@@ -4,32 +4,56 @@ package cadastroclient;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.List;
-import model.Produtos;
+import model.Produto;
 
 
 public class CadastroClient {
 
     /**
-     * @param args the command line arguments
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException
      */
     public static void main(String[] args)throws IOException, ClassNotFoundException {
-        try (Socket socket = new Socket("localhost", 4321);
-             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
-                        
-            out.writeObject("op1"); 
-            out.writeObject("op1"); 
+        Socket clientSocket = null;
+        ObjectInputStream in = null;
+        ObjectOutputStream out = null;
+        try {
+            clientSocket = new Socket(InetAddress.getByName("localhost"), 4321);
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            in = new ObjectInputStream(clientSocket.getInputStream());
+
+            out.writeObject("op1");
+            out.writeObject("op1");
+
+            String result = (String) in.readObject();
+            if (!"ok".equals(result)) {
+                System.out.println("Erro de login");
+                return;
+            }
+            System.out.println("Usuario conectado com sucesso!!");
+            
             out.writeObject("L"); 
 
-
-            List<Produtos> produtos = (List<Produtos>) in.readObject();
-            for (Produtos produto : produtos) {
+            List<Produto> Produtos = (List<Produto>) in.readObject();
+            for (Produto produto : Produtos) {
                 System.out.println(produto.getNome());
             }
+            
+            out.writeObject("X");
+
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (clientSocket != null) {
+                clientSocket.close();
+            }
         }
-    }   
+    }
 }

@@ -1,15 +1,9 @@
 
 package cadastroserver;
 
-import controller.MovimentosJpaController;
-import controller.PessoasJpaController;
-import controller.ProdutosJpaController;
-import controller.UsuariosJpaController;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import javax.swing.SwingUtilities;
 
 
 public class CadastroServer {
@@ -19,25 +13,11 @@ public class CadastroServer {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CadastroServerPU");
-        ProdutosJpaController ctrlProd = new ProdutosJpaController(emf);
-        UsuariosJpaController ctrlUsu = new UsuariosJpaController(emf);
-        MovimentosJpaController ctrlMov = new MovimentosJpaController(emf);
-        PessoasJpaController ctrlPessoa = new PessoasJpaController(emf);
-
-        try (ServerSocket serverSocket = new ServerSocket(4321)) {
-            System.out.println("Servidor aguardando conexoes na porta 4321...");
-            
-            while (true) {
-                Socket socket = serverSocket.accept();
-                CadastroThreadV2 thread = new CadastroThreadV2(ctrlUsu, ctrlMov, ctrlProd, ctrlPessoa, null, socket);
-                thread.start(); // Inicia a thread
-                System.out.println("thread iniciado!");
-            }
-            
-        }
+        SwingUtilities.invokeLater(() -> {
+            SaidaFrame frame = new SaidaFrame();
+            ThreadClient client = new ThreadClient(frame.getTexto());
+            client.start();
+        });
     }
-}
-   
-    
 
+}
